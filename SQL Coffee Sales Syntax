@@ -1,0 +1,18 @@
+ELECT  COUNT(transaction_id) number_of_sales,
+        COUNT(product_id) AS unique_product_sold,
+        SUM(transaction_qty * TO_NUMBER(REPLACE (unit_price,',','.'))) total_amount,
+        transaction_date,
+        product_category,
+        product_detail,
+        product_type,
+        store_location,
+    CASE
+        WHEN transaction_time BETWEEN '06:00:00' AND '11:59:59' THEN 'MORNING'
+        WHEN transaction_time BETWEEN '12:00:00' AND '13:59:59' THEN 'MIDDAY'
+        WHEN transaction_time BETWEEN '14:00:00' AND '16:59:59' THEN 'AFTERNOON'
+        WHEN transaction_time BETWEEN '17:00:00' AND '19:59:59' THEN 'EVENING'
+        ELSE 'NIGHT'
+        END AS time_block
+FROM    COFFEESALESDATE
+GROUP BY ALL
+ 
